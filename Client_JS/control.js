@@ -27,6 +27,13 @@ function FindByName(name) {
     return null;
 }
 
+function SelectModel(mesh)
+{
+  var mat = new BABYLON.StandardMaterial("blue", scene);
+  mat.diffuseColor = new BABYLON.Color3.Blue();
+  mesh.material = mat;
+}
+
 async function BuildWay(Way) {
     for (let j = 0; j < Way.length; j++) {
         let myPoints = [];
@@ -42,7 +49,22 @@ async function BuildWay(Way) {
                     ModelsArray[num]['ModelMesh'].position['_y'],
                     ModelsArray[num]['ModelMesh'].position['_z']
                 )
+                if(i == 0 || i == Way[j]['path'].length-1)
+                {
+                    SelectModel(ModelsArray[num]['ModelMesh']);
+                }
+                else
+                {
+                    let sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {});
+                    sphere.position = new BABYLON.Vector3(
+                        ModelsArray[num]['ModelMesh'].position['_x'],
+                        ModelsArray[num]['ModelMesh'].position['_y'] + 10,
+                        ModelsArray[num]['ModelMesh'].position['_z']
+                    )
+                    SelectModel(sphere);
+                }               
                 console.log(myPoints);
+
             }
             // let myPoints = [
             //     new BABYLON.Vector3(0, 0, 0),
