@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Список пользователей</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body class="m-3">
+    <h2 class="text-uppercase">Список пользователей</h2>
+    <form name="userForm">
+        <div class="form-group">
+            <label for="name" class="fw-bolder fst-italic">Имя:</label>
+            <input class="form-control border-1 border-dark" name="name" />
+        </div>
+        <div class="form-group">
+            <label for="conn" class="fw-bolder fst-italic">Коорд1:</label>
+            <input class="form-control border-1 border-dark" name="conn" />
+        </div>
+        <div class="form-group">
+            <label for="len" class="fw-bolder fst-italic">Ссылка:</label>
+            <input class="form-control border-1 border-dark" name="len" />
+        </div>
+        <div class="form-group">
+            <label for="info" class="fw-bolder fst-italic">Инфа:</label>
+            <input class="form-control border-1 border-dark" name="info" />
+        </div>
+        <div class="panel-body my-3">
+            <button type="submit" class="btn btn-sm btn-primary me-2 border-2 border-dark">Сохранить</button>
+            <a id="reset" class="btn btn-sm btn-primary border-2 border-dark">Сбросить</a>
+        </div>
+        <input class="mb-3" type="file" id="Photo" name="Photo" accept=".png, .jpg, .gif, .bmp">
+    </form>
+    <table class="table table-condensed table-striped table-bordered text-center border-1 border-dark">
+        <thead><tr><th>Id</th><th>Имя</th><th>Связи</th><th>Длина</th><th>Инфа</th></tr></thead>
+    </table>
+   
+    <script>
+    // Получение всех пользователей
+        async function GetUsers() {
+            // отправляет запрос и получаем ответ
+            const response = await fetch("/api/points", {
+                method: "GET",
+                headers: { "Accept": "application/json" }
+            });
+            // если запрос прошел нормально
+            if (response.ok === true) {
+                // получаем данные
+                const users = await response.json();
+                let rows = document.querySelector("tbody"); 
+                users.forEach(user => {
+                    // добавляем полученные элементы в таблицу
+                    rows.append(row(user));
+                });
+            }
+        }
+        // Получение одного пользователя
+        async function GetUser(id) {
+            const response = await fetch("/api/points/" + id, {
+                method: "GET",
+                headers: { "Accept": "application/json" }
+            });
+            if (response.ok === true) {
+                const user = await response.json();
+                const form = document.forms["userForm"];
+                form.elements["id"].value = user.id;
+                form.elements["name"].value = user.name;
+                form.elements["conn"].value = user.coord;
+                form.elements["len"].value = user.link;
+                form.elements["info"].value = user.info;
+            }
+        }
+        // Добавление пользователя
+        async function CreateUser(userName, userconn, leng, inf) {
+  
+                let registerForm = document.forms["userForm"];
+                const formData = new FormData(registerForm);
+                const xhr = new XMLHttpRequest();
+                xhr.onload = () => {
+                    console.log(JSON.parse(xhr.response));
+                    //let S = xhr.response.status;
+                    // if (S == 0) {
+                    //     //успешно отправлено
+                    // }
+                    // else {
+                    //     if (S == 255) console.log("Неизвестная ошибка при отправке.");
+                    //     if (S == 1) console.log("Ошибка в базе данных.");
+                    //     if (S == 3 | S == 2) console.log("Вы не вошли, у вас нет права на добавление.");
+                    //     if (S == 4) console.log("Ошибка в базе данных при добавлении юзерар.");
+                    // }
+                };
+                xhr.open('POST', "/newpoint");
+                xhr.send(formData);
+
+            /*
+            const response = await fetch("/newpoint", {
+                method: "POST",
+                headers: { "Accept": "application/json", "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    name: userName,
+                    coord: userconn,
+                    link: leng,
+                    info: inf,
+                })
+            });
+            if (response.ok === true) {
+                const user = await response.json();
+                reset();
+                document.querySelector("tbody").append(row(user));
+            }
+            */
+        }
+        // Изменение пользователя
+        async function EditUser(userId, userName, userconn, leng, inf) {
+            const response = await fetch("/api/points", {
+                method: "PUT",
+                headers: { "Accept": "application/json", "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    id: userId,
+                    name: userName,
+                    coord: userconn,
+                    link: leng,
+                    info: inf
+                })
+            });
+            if (response.ok === true) {
+                const user = await response.json();
+                reset();
+                document.querySelector("tr[data-rowid='" + user.id + "']").replaceWith(row(user));
+            }
+        }
+        // Удаление пользователя
+        async function DeleteUser(id) {
+            const response = await fetch("/api/points/" + id, {
+                method: "DELETE",
+                headers: { "Accept": "application/json" }
+            });
+            if (response.ok === true) {
+                const user = await response.json();
+                document.querySelector("tr[data-rowid='" + user.id + "']").remove();
+            }
+        }
+  
+        // сброс формы
+        function reset() {
+            const form = document.forms["userForm"];
+            form.reset();
+            form.elements["id"].value = -1;
+        }
+        // создание строки для таблицы
+        function row(user) {
+  
+            const tr = document.createElement("tr");
+            tr.setAttribute("data-rowid", user.id);
+  
+            const idTd = document.createElement("td");
+            idTd.append(user.id);
+            tr.append(idTd);
+  
+            const nameTd = document.createElement("td");
+            nameTd.append(user.name);
+            tr.append(nameTd);
+  
+            const connTd = document.createElement("td");
+            connTd.append(user.coord);
+            tr.append(connTd);
+  
+            const lenTd = document.createElement("td");
+            lenTd.append(user.link);
+            tr.append(lenTd);
+  
+            const infoTd = document.createElement("td");
+            infoTd.append(user.info);
+            tr.append(infoTd);
+              
+            const linksTd = document.createElement("td");
+  
+            const editLink = document.createElement("a");
+            editLink.setAttribute("data-id", user.id);
+            editLink.setAttribute("style", "cursor:pointer;padding:15px;");
+            editLink.append("Изменить");
+            editLink.addEventListener("click", e => {
+  
+                e.preventDefault();
+                GetUser(user.id);
+            });
+            linksTd.append(editLink);
+  
+            const removeLink = document.createElement("a");
+            removeLink.setAttribute("data-id", user.id);
+            removeLink.setAttribute("style", "cursor:pointer;padding:15px;");
+            removeLink.append("Удалить");
+            removeLink.addEventListener("click", e => {
+  
+                e.preventDefault();
+                DeleteUser(user.id);
+            });
+  
+            linksTd.append(removeLink);
+            tr.appendChild(linksTd);
+  
+            return tr;
+        }
+        // сброс значений формы
+        document.getElementById("reset").click(function (e) {
+  
+            e.preventDefault();
+            reset();
+        })
+  
+        // отправка формы
+        document.forms["userForm"].addEventListener("submit", e => {
+            e.preventDefault();
+            const form = document.forms["userForm"];
+            const id = form.elements["id"].value;
+            const name = form.elements["name"].value;
+            const conn = form.elements["conn"].value;
+            const len = form.elements["len"].value;
+            const info = form.elements["info"].value;
+            if (id == -1)
+                CreateUser(name, conn, len, info);
+            else
+                EditUser(id, name, conn, len, info);
+        });
+  
+        // загрузка пользователей
+        GetUsers();
+    </script>
+</body>
+</html>

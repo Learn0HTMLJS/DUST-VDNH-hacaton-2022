@@ -1,0 +1,12 @@
+[
+{"id":0,"did":"P","name":"center_input.stl","coord":"","info":"Главный вход ВДНХ","link":"https://vdnh.ru/"},
+{"id":1,"did":"B","name":"druhba_narodov.stl","coord":"","info":"Дружба народов СССР","link":""},
+{"id":2,"did":"C","name":"povilion_1_center.stl","coord":"","info":"Павильон № 1 Центральный","link":""},
+{"id":3,"did":"D","name":"povilion_2_robostation.stl","coord":"","info":"Павильон № 2 Робостанция","link":""},
+{"id":4,"did":"F","name":"povilion_5_MGXM.stl","coord":"","info":"Павильон № 5 Музей городского хозяйства Москвы","link":""},
+{"id":5,"did":"G","name":"povilion_5_Abhasia.stl","coord":"","info":"Павильон №6 Абхазия","link":""},
+{"id":6,"did":"H","name":"povilion_10_Moldova.stl","coord":"","info":"Павильон № 10 Молдова","link":""},
+{"id":7,"did":"I","name":"Dvores_GOS_MFS.stl","coord":"","info":"Дворец госуслуг МФЦ, павильон № 71","link":""},
+{"id":8,"did":"J","name":"povilion_68_Armenia.stl","coord":"","info":"Павильон № 68 Армения","link":""},
+{"id":9,"did":"K","name":"povilion_67_Karelia.stl","coord":"","info":"Павильон № 67 Карелия","link":""}
+]

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VDNH route</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="/BABYLON/babylon.js"></script>
+    <script src="/BABYLON/babylon.gui.min.js"></script>
+    <script src="/BABYLON/babylon.loaders.js"></script>
+    <script src="/BABYLON/stlFileLoader.js"></script>
+    <script src="/BABYLON/babylon.objFileLoader.js"></script>
+</head>
+
+<body>
+    <header>
+        <img src="/img/logo.svg" alt="logo vdnh">
+        <nav>
+            <a href="#">События</a>
+            <a href="#">Экскурсии</a>
+            <a href="#">Посетителям</a>
+            <a href="#">Билеты</a>
+            <a href="#">Контакты</a>
+            <a href="#">Еще...</a>
+        </nav>
+        <a href="#">EN</a>
+        <img src="/img/search.svg" alt="serch">
+    </header>
+    <main>
+        <section class="questions">
+            <h1>Построение маршрута:</h1>
+            <a class="indi_link" href="/indi-route">Индивидуальный маршрут</a>
+            <h2>Возраст</h2>
+            <select id="age">
+                <option value="0">До 5 лет</option>
+                <option value="1">6-11 лет</option>
+                <option value="2">12-16</option>
+                <option value="3" selected>16-25</option>
+                <option value="4">26-45</option>
+                <option value="5">45+</option>
+            </select>
+            <h2>Количество человек</h2>
+            <select id="count">
+                <option value="0" selected>1</option>
+                <option value="1">2-5</option>
+                <option value="2">6-10</option>
+                <option value="3">10+</option>
+            </select>
+            <h2>Время прогулки</h2>
+            <select id="time">
+                <option value="0" selected>час</option>
+                <option value="1">2 часа</option>
+                <option value="2">3 часа</option>
+                <option value="3">4 часа</option>
+                <option value="4">4+ часов</option>
+            </select>
+            <h2>Бюджет</h2>
+            <select id="budget">
+                <option value="0" selected>Без разницы</option>
+                <option value="1">Только бесплатно</option>
+                <option value="2">Можно платно</option>
+            </select>
+            <h2>Перемещение по территории</h2>
+            <select id="walk">
+                <option value="0" selected>Без разницы</option>
+                <option value="1">Пешком</option>
+                <option value="2">Предпочтительно на электробусах</option>
+            </select>
+            <h2>Загрузка мероприятия</h2>
+            <select id="sens">
+                <option value="0" selected>Без разницы</option>
+                <option value="1">Больше людей</option>
+                <option value="2">Меньше людей</option>
+            </select>
+            <h2>Прохождение мероприятия</h2>
+            <select id="street">
+                <option value="0" selected>Без разницы</option>
+                <option value="1">Только на улице</option>
+                <option value="2">Только в помещениях</option>
+            </select>
+            <h2>Точка начала</h2>
+            <select id="start">
+                <option value="А" selected>Арка ВДНХ</option>
+            </select>
+            <h2>Точка конца</h2>
+            <select id="end">
+                <option value="А" selected>Арка ВДНХ</option>
+                <option value="Б" selected>2</option>
+                <option value="В" selected>3</option>
+            </select>
+            <h2>Максимум путей</h2>
+            <input type="number" id="max" style="margin-left: 10px;"/>
+            <label class="OVZ">
+                <input type="checkbox">Доступность для людей с ОВЗ
+            </label>
+            <button class="route" onclick="GetTheRoute();">Построить маршрут</button>
+        </section>
+        <section class="map">
+            <canvas id="renderCanvas"></canvas>
+            <!-- <iframe
+                src="https://yandex.ru/map-widget/v1/?um=constructor%3A39b92a0b15137fc1aed092efddeed6497153cf58f3d3dbc0f03213d1a536b402&amp;source=constructor"
+                frameborder="1"></iframe> -->
+        </section>
+    </main>
+    <footer>
+        <div class="soc_net">
+            <img src="/img/icon-vk.svg" alt="vk">
+            <img src="/img/icon-ok.svg" alt="ok">
+            <img src="/img/icon-yt.svg" alt="Youtube">
+            <img src="/img/icon-yz.svg" alt="yz">
+            <img src="/img/icon-tg.svg" alt="tg">
+        </div>
+        <nav class="fnav">
+            <a class="fnav_link" href="#">Главное</a>
+            <a class="fnav_link" href="#">События</a>
+            <a class="fnav_link" href="#">Места</a>
+            <a class="fnav_link" href="#">Подборки</a>
+            <a class="fnav_link" href="#">Посетителям</a>
+            <a class="fnav_link" href="#">Новости</a>
+            <a class="fnav_link" href="#">Контакты</a>
+            <a class="fnav_link" href="#">Партнеры</a>
+            <a class="fnav_link" href="#">Вакансии</a>
+        </nav>
+    </footer>
+    <script src="/run.js"></script>
+    <script src="/export/loader.js"></script>
+    <script src="/control.js"></script>
+</body>
+
+</html>

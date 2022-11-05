@@ -1,0 +1,57 @@
+.Main{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.Card{
+    margin: 0 auto;
+}
+
+#LEFT{
+    width: 80%;
+}
+
+#RIGHT{
+/*    width: 200px;*/
+    margin: 5px;
+}
+
+#CREATE_MAP_FILE{
+    margin: 5px;
+}
+
+canvas{
+    width: 100%;
+    height: 100%;
+}
+
+.MOVING_PANEL{
+    margin: 0 auto;
+}
+
+#MOVING_PANEL{
+    margin: 0 auto;
+    visibility: hidden;
+}
+
+.CoordBorder{
+    margin-top: 5px;
+    border-width: 2;
+    border-style: solid;
+    border-color: black;
+}
+
+#SET_COORDINATE{
+    margin-top: 5px;
+}
+
+#SET_ROTATION{
+    margin-top: 5px;    
+}
+
+#GET_MAP_FILE{
+    margin-top: 5px;
+    margin-left: 10px;    
+}

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список пользователей</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body class="m-3">
+    <h2 class="text-uppercase">Список пользователей</h2>
+    <form name="userForm" >
+        <input type="hidden" name="id" value="-1" />
+        <div class="form-group">
+            <label for="name" class="fw-bolder fst-italic">Имя:</label>
+            <input class="form-control border-1 border-dark" name="name" />
+        </div>
+        <div class="form-group">
+            <label for="conn" class="fw-bolder fst-italic">Связь:</label>
+            <input class="form-control border-1 border-dark" name="conn" />
+        </div>
+        <div class="form-group">
+            <label for="len" class="fw-bolder fst-italic">Длина:</label>
+            <input class="form-control border-1 border-dark" name="len" />
+        </div>
+        <div class="form-group">
+            <label for="info" class="fw-bolder fst-italic">Инфа:</label>
+            <input class="form-control border-1 border-dark" name="info" />
+        </div>
+        <div class="panel-body my-3">
+            <button type="submit" class="btn btn-sm btn-primary me-2 border-2 border-dark">Сохранить</button>
+            <a id="reset" class="btn btn-sm btn-primary border-2 border-dark">Сбросить</a>
+        </div>
+    </form>
+    <table class="table table-condensed table-striped table-bordered text-center border-1 border-dark">
+        <thead><tr><th>Id</th><th>Имя</th><th>Связи</th><th>Длина</th><th>Инфа</th></tr></thead>
+    </table>
+   
+    <script >
+    // Получение всех пользователей
+        async function GetUsers() {
+            // отправляет запрос и получаем ответ
+            const response = await fetch("/api/users", {
+                method: "GET",
+                headers: { "Accept": "application/json" }
+            });
+            // если запрос прошел нормально
+            if (response.ok === true) {
+                // получаем данные
+                const users = await response.json();
+                let rows = document.querySelector("tbody"); 
+                users.forEach(user => {
+                    // добавляем полученные элементы в таблицу
+                    rows.append(row(user));
+                });
+            }
+        }
+        // Получение одного пользователя
+        async function GetUser(id) {
+            const response = await fetch("/api/users/" + id, {
+                method: "GET",
+                headers: { "Accept": "application/json" }
+            });
+            if (response.ok === true) {
+                const user = await response.json();
+                const form = document.forms["userForm"];
+                form.elements["id"].value = user.id;
+                form.elements["name"].value = user.name;
+                form.elements["conn"].value = user.conn;
+                form.elements["len"].value = user.len;
+                form.elements["info"].value = user.info;
+            }
+        }
+        // Добавление пользователя
+        async function CreateUser(userName, userconn, leng, inf) {
+  
+            const response = await fetch("api/users", {
+                method: "POST",
+                headers: { "Accept": "application/json", "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    name: userName,
+                    conn: userconn,
+                    len: leng,
+                    info: inf,
+                })
+            });
+            if (response.ok === true) {
+                const user = await response.json();
+                reset();
+                document.querySelector("tbody").append(row(user));
+            }
+        }
+        // Изменение пользователя
+        async function EditUser(userId, userName, userconn, leng, inf) {
+            const response = await fetch("api/users", {
+                method: "PUT",
+                headers: { "Accept": "application/json", "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    id: userId,
+                    name: userName,
+                    conn: userconn,
+                    len: leng,
+                    info: inf
+                })
+            });
+            if (response.ok === true) {
+                const user = await response.json();
+                reset();
+                document.querySelector("tr[data-rowid='" + user.id + "']").replaceWith(row(user));
+            }
+        }
+        // Удаление пользователя
+        async function DeleteUser(id) {
+            const response = await fetch("/api/users/" + id, {
+                method: "DELETE",
+                headers: { "Accept": "application/json" }
+            });
+            if (response.ok === true) {
+                const user = await response.json();
+                document.querySelector("tr[data-rowid='" + user.id + "']").remove();
+            }
+        }
+  
+        // сброс формы
+        function reset() {
+            const form = document.forms["userForm"];
+            form.reset();
+            form.elements["id"].value = -1;
+        }
+        // создание строки для таблицы
+        function row(user) {
+  
+            const tr = document.createElement("tr");
+            tr.setAttribute("data-rowid", user.id);
+  
+            const idTd = document.createElement("td");
+            idTd.append(user.id);
+            tr.append(idTd);
+  
+            const nameTd = document.createElement("td");
+            nameTd.append(user.name);
+            tr.append(nameTd);
+  
+            const connTd = document.createElement("td");
+            connTd.append(user.conn);
+            tr.append(connTd);
+  
+            const lenTd = document.createElement("td");
+            lenTd.append(user.len);
+            tr.append(lenTd);
+  
+            const infoTd = document.createElement("td");
+            infoTd.append(user.info);
+            tr.append(infoTd);
+              
+            const linksTd = document.createElement("td");
+  
+            const editLink = document.createElement("a");
+            editLink.setAttribute("data-id", user.id);
+            editLink.setAttribute("style", "cursor:pointer;padding:15px;");
+            editLink.append("Изменить");
+            editLink.addEventListener("click", e => {
+  
+                e.preventDefault();
+                GetUser(user.id);
+            });
+            linksTd.append(editLink);
+  
+            const removeLink = document.createElement("a");
+            removeLink.setAttribute("data-id", user.id);
+            removeLink.setAttribute("style", "cursor:pointer;padding:15px;");
+            removeLink.append("Удалить");
+            removeLink.addEventListener("click", e => {
+  
+                e.preventDefault();
+                DeleteUser(user.id);
+            });
+  
+            linksTd.append(removeLink);
+            tr.appendChild(linksTd);
+  
+            return tr;
+        }
+        // сброс значений формы
+        document.getElementById("reset").click(function (e) {
+  
+            e.preventDefault();
+            reset();
+        })
+  
+        // отправка формы
+        document.forms["userForm"].addEventListener("submit", e => {
+            e.preventDefault();
+            const form = document.forms["userForm"];
+            const id = form.elements["id"].value;
+            const name = form.elements["name"].value;
+            const conn = form.elements["conn"].value;
+            const len = form.elements["len"].value;
+            const info = form.elements["info"].value;
+            if (id == -1)
+                CreateUser(name, conn, len, info);
+            else
+                EditUser(id, name, conn, len, info);
+        });
+  
+        // загрузка пользователей
+        GetUsers();
+    </script>
+</body>
+</html>
