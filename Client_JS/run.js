@@ -19,6 +19,13 @@ function createScene() {
   BABYLON.STLFileLoader.DO_NOT_ALTER_FILE_COORDINATES = true;
   assetsManager = new BABYLON.AssetsManager(scene);
   
+  var music = new BABYLON.Sound("Music", "/sound.mp3", scene, 
+  function() {
+    music.play();
+ },
+ {      loop: true,
+   autoplay: true}
+ );
   //  Взаимодействие с моделью  
   const pointerDown_ModelSelect = (mesh, vect) => {
     SelectMesh(mesh);
