@@ -9,11 +9,12 @@
 </div>
 */
 
-let infoObj = document.getElementById('info_object');
-let infoImg = document.getElementById('info_img');
+let infoObj = document.getElementById('info_object1');
+let infoImg = document.getElementById('info_img1');
 let infoName = document.getElementById('info_name');
 let infoInfo = document.getElementById('info_info');
 let SelectedMesh = null;
+document.getElementsByTagName('body')[0].onkeydown = CANCEL_SELECTION_Keypress;
 
 const INFO = [
     {image: "/img/input_main.jpg", 
@@ -80,9 +81,10 @@ function GetInfo(mesh)
             break;
         }
     }
+    infoObj.style.visibility = 'visible';    
 }
 
-function CanSelect()
+function CanSelect(mesh)
 {  
     for (let i = 0; i < ModelsArray.length; i++) {
         if (ModelsArray[i]['ModelMesh'] == mesh)
@@ -92,14 +94,19 @@ function CanSelect()
 }
 
 function SelectMesh(mesh){
-    if(CanSelect || mesh != ground)
+    if(mesh == SelectedMesh)
+    {
+        UnselectMesh();
+        return;
+    }
+    if(CanSelect(mesh))
     {
         UnselectMesh();
         SelectedMesh = mesh;
         var localMaterial = new BABYLON.StandardMaterial("Yellow", scene);
         localMaterial.diffuseColor = new BABYLON.Color3.Yellow();
         SelectedMesh.material = localMaterial;
-        GetInfo(SelectMesh);
+        GetInfo(SelectedMesh);
     }
 }
 
@@ -109,5 +116,12 @@ function UnselectMesh() {
         localMaterial.diffuseColor = new BABYLON.Color3.White();
         SelectedMesh.material = localMaterial;
         SelectedMesh = null;
+        infoObj.style.visibility = 'hidden';
     }
+}
+
+function CANCEL_SELECTION_Keypress(e)
+{
+    if(SelectedMesh != null && e.key == 'Escape')
+        UnselectMesh();
 }
