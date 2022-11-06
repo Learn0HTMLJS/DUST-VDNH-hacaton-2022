@@ -2,6 +2,8 @@
 canvas.addEventListener('mouseover', canvas_mouseover);
 canvas.addEventListener('mouseout', canvas_mouseout);
 let ModelsArray = [];
+let UnregistredMeshes = [];
+//let lines;
 
 ModelsArray = LoadMap(engine, scene, assetsManager);
 console.log(ModelsArray);
@@ -33,7 +35,20 @@ function SelectModel(mesh) {
     mesh.material = mat;
 }
 
+function ManipulationEnd() {
+    for (let i = 0; i < UnregistredMeshes.length; i++) {
+        UnregistredMeshes[i].dispose();
+    }
+    UnregistredMeshes = [];
+    for (let i = 0; i < ModelsArray.length; i++) {
+        var t = new BABYLON.StandardMaterial("White", scene);
+        t.diffuseColor = new BABYLON.Color3.White();
+        ModelsArray[i]['ModelMesh'].material = t;
+    }
+}
+
 async function BuildWay(Way) {
+    ManipulationEnd();
     for (let j = 0; j < Way.length; j++) {
         let myPoints = [];
         for (let i = 0; i < Way[j]['path'].length; i++) {
@@ -59,13 +74,16 @@ async function BuildWay(Way) {
                         ModelsArray[num]['ModelMesh'].position['_z']
                     )
                     SelectModel(sphere);
+                    UnregistredMeshes.push(sphere);
                 }
                 console.log(myPoints);
 
             }
         }
-        const lines = BABYLON.MeshBuilder.CreateLines("lines", { points: myPoints});
+        //        lines.dispose();
+        let lines = new BABYLON.MeshBuilder.CreateLines("lines", { points: myPoints });
         lines.color = new BABYLON.Color3(1, 0, 0);
+        UnregistredMeshes.push(lines);
     }
 }
 

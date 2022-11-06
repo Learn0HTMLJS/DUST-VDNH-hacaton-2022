@@ -19,6 +19,7 @@ function Choose() {
     path1.style.visibility = 'visible';
     block1.style.visibility = 'visible';
     path1.textContent = "Путь: " + window.LastWays[window.RoutesBox.value].path;
+   
 }
 
 async function MyMark() {
