@@ -15,6 +15,7 @@ let infoName = document.getElementById('info_name');
 let infoInfo = document.getElementById('info_info');
 let SelectedMesh = null;
 document.getElementsByTagName('body')[0].onkeydown = CANCEL_SELECTION_Keypress;
+infoObj.style.visibility = 'hidden';
 
 const INFO = [
     {image: "/img/input_main.jpg", 
