@@ -68,7 +68,7 @@ async function BuildWay(Way) {
                     let sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {});
                     sphere.position = new BABYLON.Vector3(
                         ModelsArray[num]['ModelMesh'].position['_x'],
-                        ModelsArray[num]['ModelMesh'].position['_y'] + 40,
+                        ModelsArray[num]['ModelMesh'].position['_y'] + 30,
                         ModelsArray[num]['ModelMesh'].position['_z']
                     )
                     SelectModel(sphere);
