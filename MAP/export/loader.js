@@ -46,7 +46,7 @@ function LoadMap(engine, scene, assetsManager, ground) {
     let MapFile;
     let ModelsCollection = [];
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://localhost:3000/api/models', false);
+    xhr.open('GET', '/api/models', false);
     xhr.addEventListener("load", function () {
         let result = JSON.parse(xhr.response);
         MapFile = result;
