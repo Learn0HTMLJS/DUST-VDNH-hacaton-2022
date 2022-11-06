@@ -99,5 +99,5 @@ function CANCEL_SET_COORDINATE_Keypress(e)
 
 function GET_MAP_FILE_button_Click()
 {
-  LoadMap(engine, scene, assetsManager, ModelsArray);
+  ModelsArray = LoadMap(engine, scene, assetsManager, ground);
 }

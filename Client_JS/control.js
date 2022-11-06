@@ -3,7 +3,7 @@ canvas.addEventListener('mouseover', canvas_mouseover);
 canvas.addEventListener('mouseout', canvas_mouseout);
 //let lines;
 
-ModelsArray = LoadMap(engine, scene, assetsManager);
+ModelsArray = LoadMap(engine, scene, assetsManager, ground);
 console.log(ModelsArray);
 
 /*var mat1 = new BABYLON.StandardMaterial("green", scene);

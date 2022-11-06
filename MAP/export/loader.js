@@ -42,7 +42,7 @@
     return ModelsCollection;
 }*/
 
-function LoadMap(engine, scene, assetsManager) {
+function LoadMap(engine, scene, assetsManager, ground) {
     let MapFile;
     let ModelsCollection = [];
     let xhr = new XMLHttpRequest();
