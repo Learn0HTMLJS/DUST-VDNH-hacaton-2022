@@ -1,8 +1,6 @@
 //**************************************************************************** */
 canvas.addEventListener('mouseover', canvas_mouseover);
 canvas.addEventListener('mouseout', canvas_mouseout);
-let ModelsArray = [];
-let UnregistredMeshes = [];
 //let lines;
 
 ModelsArray = LoadMap(engine, scene, assetsManager);

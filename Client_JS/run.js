@@ -1,9 +1,3 @@
-var canvas = document.getElementById("renderCanvas");
-var engine = null;
-var scene = null;
-var sceneToRender = null;
-var ground = null;
-var assetsManager;
 var createDefaultEngine = function () { return new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true, disableWebGL2Support: false }); };
 
 var startRenderLoop = function (engine, canvas) {
@@ -27,9 +21,7 @@ function createScene() {
   
   //  Взаимодействие с моделью  
   const pointerDown_ModelSelect = (mesh, vect) => {
- /*   var mat = new BABYLON.StandardMaterial("blue", scene);
-    mat.diffuseColor = new BABYLON.Color3.Blue();
-    mesh.material = mat;*/
+    SelectMesh(mesh);
   }
 
   scene.onPointerObservable.add((pointerInfo) => {
