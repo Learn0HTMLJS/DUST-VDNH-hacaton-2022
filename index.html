@@ -18,7 +18,7 @@
     <header>
         <img src="/img/logo.svg" alt="logo vdnh">
         <nav>
-            <a href="#">События</a>
+            <a href="/events">События</a>
             <a href="#">Экскурсии</a>
             <a href="#">Посетителям</a>
             <a href="#">Билеты</a>
@@ -81,21 +81,37 @@
                 <option value="2">Только в помещениях</option>
             </select>
             <h2>Точка начала</h2>
-            <select id="start"></select>
+            <select id="start">
+            </select>
             <h2>Точка конца</h2>
-            <select id="end"></select>
+            <select id="end">
+            </select>
             <h2>Максимум путей</h2>
-            <input type="number" id="max" style="margin-left: 10px;"/>
+            <input type="number" id="max" style="margin-left: 10px;" value="1" min="1" max="20" />
             <label class="OVZ">
                 <input type="checkbox">Доступность для людей с ОВЗ
             </label>
-            <button class="route" onclick="GetTheRoute();">Построить маршрут</button>
+            <button class="route" onclick="GetTheRoute(); Reset();">Построить маршрут</button>
         </section>
         <section class="map">
             <canvas id="renderCanvas"></canvas>
             <!-- <iframe
                 src="https://yandex.ru/map-widget/v1/?um=constructor%3A39b92a0b15137fc1aed092efddeed6497153cf58f3d3dbc0f03213d1a536b402&amp;source=constructor"
                 frameborder="1"></iframe> -->
+            <section id="likeIt">
+                <select id="choose">
+                </select>
+                <button class="route" id="butt1" onclick="Choose();">Выбрать</button>
+                <h2 id="PATH1" style="visibility: hidden;">Путь:</h2>
+                <div id="block1" style="visibility: hidden;">
+                    <h2>Удачного пути!</h2>
+                    <h2>Вам понравился маршрут? Поставьте оценку от 0 до 10 :)</h2>
+                    <input type="number" id="mymark" style="margin-left: 10px;" value="1" min="0" max="10" />
+                    <button class="route" onclick="MyMark();">Проголосовать</button>
+                </div>
+                <h2 id="PATH2" style="visibility: hidden;">Спасибо за отзыв!</h2>
+            </section>
+            <script src="/routesMark.js"></script>
         </section>
     </main>
     <footer>

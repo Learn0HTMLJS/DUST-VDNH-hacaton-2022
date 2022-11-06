@@ -39,6 +39,11 @@ app.get("/", function (req, res) {
     res.sendFile(__dirname + "\\index.html");
 });
 
+app.get("/events", function (req, res) {
+    console.log("здрасте4");
+    res.sendFile(__dirname + "\\index4.html");
+});
+
 app.get("/indi-route", function (req, res) {
     console.log("здрасте");
     res.sendFile(__dirname + "\\indi-route.html");
@@ -358,6 +363,7 @@ app.post("/retgr", jsonParser, function (req, res) {
 
 app.post("/setj", jsonParser, function (req, res) {
     ChangeJoy(req.body.Path, req.body.Change);
+    console.log("изменена радость: " + req.body.Path);
     res.sendStatus(200);
 });
 
@@ -398,11 +404,13 @@ app.post("/newpoint", function (req, res) {
 
 // Добавить оценку
 app.post("/newmark", jsonParser, function (req, res) {
+    console.log("новая оценка: " + req.body);
     let content = fs.readFileSync("events.json", "utf8");
     let users = JSON.parse(content);
-    users.push({ name: req.body.name, vector: req.body.vector, mark: req.body.mark });
+    users.push({ name: req.body.name, vector: req.body.vector, mark: Number(req.body.mark) });
     let data = JSON.stringify(users);
     fs.writeFileSync("events.json", data);
+    res.sendStatus(200);
 });
 
 app.post("/find_event", jsonParser, function (req, res) {
@@ -410,21 +418,22 @@ app.post("/find_event", jsonParser, function (req, res) {
     let events = JSON.parse(content);
     function comparator(a, b) {
         let f = 0;
-        for (let i = 0; i < a.vector.length; i++) f += Math.pow(a.vector[i] - b.vector[i], 2);
-        return Math.sqrt(f);
+        for (let i = 0; i < a.vector.length; i++) f += Math.pow(req.body.vec[i] - b.vector[i], 2);
+        f = Math.sqrt(f);
+        let g = 0;
+        for (let i = 0; i < a.vector.length; i++) g += Math.pow(req.body.vec[i] - a.vector[i], 2);
+        g = Math.sqrt(g);
+        return f - g;
     }
     events = events.sort(comparator).reverse();
-    //разные name
-    //mark >= minMark
-    //их количество
     let result = [];
-    //console.log(events);
-    //console.log(req.body);
+    console.log(events);
+    console.log(req.body);
     for (let i = 0; i < events.length; i++) {
         if (events[i].mark >= req.body.mark) {
             console.log(events[i].name + i);
             let b = true;
-            for (let j = 0; j < result.length; i++) {
+            for (let j = 0; j < result.length; j++) {
                 if (result[j].name == events[i].name) {
                     b = false;
                     break;
@@ -435,7 +444,6 @@ app.post("/find_event", jsonParser, function (req, res) {
         if (result.length == req.body.count) break;
     }
     res.send(JSON.stringify(result));
-    // min mark, count, vec
 });
 
 class KNN {
@@ -529,6 +537,7 @@ let KNN_Data = {
         [0, 0, 0, 0, 0, 0, 10, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 10, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 10, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 10]
     ],
 
     labels: [
@@ -540,7 +549,8 @@ let KNN_Data = {
         "Interesting",
         "Entertainment",
         "Robots",
-        "Child"
+        "Child",
+        "Other"
         /*
         спорт
         фотография
@@ -551,6 +561,7 @@ let KNN_Data = {
         развлечения
         робототехника
         детское
+        другое
         */
     ]
 };
@@ -670,7 +681,7 @@ function ChangeJoy(arr, N) {
             if ((JoyGraph[k].name == arr[j] && JoyGraph[k].conn == arr[j + 1])
                 || (JoyGraph[k].name == arr[j + 1] && JoyGraph[k].conn == arr[j])
             ) {
-                JoyGraph[k].len += N;
+                JoyGraph[k].len += Number(N);
             }
         }
     }

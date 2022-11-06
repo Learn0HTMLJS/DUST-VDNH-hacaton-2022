@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>События</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="/BABYLON/babylon.js"></script>
+    <script src="/BABYLON/babylon.gui.min.js"></script>
+    <script src="/BABYLON/babylon.loaders.js"></script>
+    <script src="/BABYLON/stlFileLoader.js"></script>
+    <script src="/BABYLON/babylon.objFileLoader.js"></script>
+</head>
+
+<body>
+    <header>
+        <img src="/img/logo.svg" alt="logo vdnh">
+        <nav>
+            <a href="/events">События</a>
+            <a href="#">Экскурсии</a>
+            <a href="#">Посетителям</a>
+            <a href="#">Билеты</a>
+            <a href="#">Контакты</a>
+            <a href="#">Еще...</a>
+        </nav>
+        <a href="#">EN</a>
+        <img src="/img/search.svg" alt="serch">
+    </header>
+    <main>
+
+        <section class="questions">
+            <h1>Укажите свом предпочтения (0-10):</h1>
+
+            <h2>Спорт</h2>
+            <input type="number" id="s1" style="margin-left: 10px;" value="0" min="0" max="10" />
+            <h2>Фотография</h2>
+            <input type="number" id="s2" style="margin-left: 10px;" value="0" min="0" max="10" />
+            <h2>Чтение</h2>
+            <input type="number" id="s3" style="margin-left: 10px;" value="0" min="0" max="10" />
+            <h2>Путешествия</h2>
+            <input type="number" id="s4" style="margin-left: 10px;" value="0" min="0" max="10" />
+            <h2>История</h2>
+            <input type="number" id="s5" style="margin-left: 10px;" value="0" min="0" max="10" />
+            <h2>Познавательное</h2>
+            <input type="number" id="s6" style="margin-left: 10px;" value="0" min="0" max="10" />
+            <h2>Развлечения</h2>
+            <input type="number" id="s7" style="margin-left: 10px;" value="0" min="0" max="10" />
+            <h2>Робототехника</h2>
+            <input type="number" id="s8" style="margin-left: 10px;" value="0" min="0" max="10" />
+            <h2>Детское</h2>
+            <input type="number" id="s9" style="margin-left: 10px;" value="0" min="0" max="10" />
+            <h2>Другое</h2>
+            <input type="number" id="s10" style="margin-left: 10px;" value="0" min="0" max="10" />
+
+            <h2>Минимальная оценка</h2>
+            <input type="number" id="mark" style="margin-left: 10px;" value="0" min="0" max="10" />
+            <h2>Максимум событий</h2>
+            <input type="number" id="max" style="margin-left: 10px;" value="1" />
+            <button class="route" onclick="GetEvents();">Показать события</button>
+        </section>
+        <section id="eventsList">
+        </section>
+        <script>
+            EVENTS = document.getElementById("eventsList");
+            let EventsData = [];
+
+            async function MyMark(ID) {
+                let S = JSON.stringify({
+                    name: EventsData[ID].name,
+                    mark: document.getElementById("mark" + ID).value,
+                    vector: EventsData[ID].vector
+                });
+                const response = await fetch("/newmark", {
+                    method: "POST",
+                    headers: { "Accept": "application/json", "Content-Type": "application/json" },
+                    body: S
+                });
+                if (response.ok === true) {
+                    document.getElementById("event" + ID).style.display = 'none';
+                    document.getElementById("result" + ID).style.display = 'block';
+                }
+            }
+
+            async function GetEvents() {
+                let Vect = new Array(10);
+                for (let i = 1; i <= 10; i++) Vect[i - 1] = document.getElementById("s" + i).value;
+                let S = JSON.stringify({
+                    count: document.getElementById("max").value,
+                    mark: document.getElementById("mark").value,
+                    vec: Vect
+                });
+                const response = await fetch("/find_event", {
+                    method: "POST",
+                    headers: { "Accept": "application/json", "Content-Type": "application/json" },
+                    body: S
+                });
+                // если запрос прошел нормально
+                if (response.ok === true) {
+                    // получаем данные
+                    const users = await response.json();
+                    console.log(users);
+                    EVENTS.innerHTML = "";
+                    for (let i = 0; i < users.length; i++) {
+                        EventsData.push({ name: users[i].name, vector: users[i].vector })
+                        EVENTS.insertAdjacentHTML(
+                            'afterBegin',
+                            `
+                        <div style="width:400px; border-style: solid;border-color: black; background-color: white;">
+                        <img src="Places/` + users[i].name + `" style="width:400px; height:auto;" />
+                        <p style="margin: 10px 10px">` + users[i].name + `</p>
+                        <p style="margin: 10px 10px">Оценка: ` + users[i].mark + `</p>
+                        <section id="event` + i + `">
+                            <h2>Отличное событие? Поставьте оценку от 0 до 10 :)</h2>
+                            <input type="number" id="mark` + i + `" style="margin-left: 10px;" value="1" min="0" max="10" />
+                            <button class="route" onclick="MyMark(` + i + `);">Проголосовать</button>
+                        </section>
+                        <h2 id="result` + i + `" style="display: none;">Спасибо за отзыв :)</h2>
+                        </div>
+                        `);//height:600px;
+                    }
+                }
+            }
+/*
+                        async function Click(id) {
+                            let S = JSON.stringify({
+                                //
+                            });
+                            const response = await fetch("/find_event", {
+                                method: "POST",
+                                headers: { "Accept": "application/json", "Content-Type": "application/json" },
+                                body: //
+                            });
+                            if (response.ok === true) {
+                                const users = await response.json();
+                                console.log(users);
+                                //
+                            }
+                        }
+                        */
+        </script>
+    </main>
+    <footer>
+        <div class="soc_net">
+            <img src="/img/icon-vk.svg" alt="vk">
+            <img src="/img/icon-ok.svg" alt="ok">
+            <img src="/img/icon-yt.svg" alt="Youtube">
+            <img src="/img/icon-yz.svg" alt="yz">
+            <img src="/img/icon-tg.svg" alt="tg">
+        </div>
+        <nav class="fnav">
+            <a class="fnav_link" href="#">Главное</a>
+            <a class="fnav_link" href="#">События</a>
+            <a class="fnav_link" href="#">Места</a>
+            <a class="fnav_link" href="#">Подборки</a>
+            <a class="fnav_link" href="#">Посетителям</a>
+            <a class="fnav_link" href="#">Новости</a>
+            <a class="fnav_link" href="#">Контакты</a>
+            <a class="fnav_link" href="#">Партнеры</a>
+            <a class="fnav_link" href="#">Вакансии</a>
+        </nav>
+    </footer>
+    <script src="/run.js"></script>
+    <script src="/export/loader.js"></script>
+    <script src="/control.js"></script>
+</body>
+
+</html>

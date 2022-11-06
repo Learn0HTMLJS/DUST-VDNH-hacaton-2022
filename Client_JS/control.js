@@ -92,7 +92,14 @@ async function GetTheRoute() {
     });
     if (response.ok === true) {
         const users = await response.json();
+        window.LastWays = users;
         BuildWay(users);   // Доделать
+        window.RoutesBox.innerHTML = "";
+        for (let i = 0; i < users.length; i++) {
+            window.RoutesBox.insertAdjacentHTML("afterBegin", `
+            <option value="` + i + `">` + users[i].path + `</option>
+            `);
+        }
         console.log(users);
     }
 }
