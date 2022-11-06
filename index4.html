@@ -108,7 +108,7 @@
                             'afterBegin',
                             `
                         <div style="width:400px; border-style: solid;border-color: black; background-color: white;">
-                        <img src="Places/` + users[i].name + `" style="width:400px; height:auto;" />
+                        <img src="Places/` + users[i].name + `.jpg" style="width:400px; height:auto;" />
                         <p style="margin: 10px 10px">` + users[i].name + `</p>
                         <p style="margin: 10px 10px">Оценка: ` + users[i].mark + `</p>
                         <section id="event` + i + `">
@@ -122,23 +122,6 @@
                     }
                 }
             }
-/*
-                        async function Click(id) {
-                            let S = JSON.stringify({
-                                //
-                            });
-                            const response = await fetch("/find_event", {
-                                method: "POST",
-                                headers: { "Accept": "application/json", "Content-Type": "application/json" },
-                                body: //
-                            });
-                            if (response.ok === true) {
-                                const users = await response.json();
-                                console.log(users);
-                                //
-                            }
-                        }
-                        */
         </script>
     </main>
     <footer>
