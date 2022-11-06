@@ -26,6 +26,10 @@ function createScene() {
   BABYLON.STLFileLoader.DO_NOT_ALTER_FILE_COORDINATES = true;
   assetsManager = new BABYLON.AssetsManager(scene);
   
+//  NAVMESH TEST  
+  // let navigationPlugin = new BABYLON.RecastJSPlugin(recast);
+  // navigationPlugin.setWorkerURL("workers/navMeshWorker.js");
+
   //  Взаимодействие с моделью  
   const pointerDown_ModelSelect = (mesh, vect) => {
  /*   var mat = new BABYLON.StandardMaterial("blue", scene);
