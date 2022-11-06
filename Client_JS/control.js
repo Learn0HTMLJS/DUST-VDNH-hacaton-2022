@@ -27,11 +27,10 @@ function FindByName(name) {
     return null;
 }
 
-function SelectModel(mesh)
-{
-  var mat = new BABYLON.StandardMaterial("blue", scene);
-  mat.diffuseColor = new BABYLON.Color3.Blue();
-  mesh.material = mat;
+function SelectModel(mesh) {
+    var mat = new BABYLON.StandardMaterial("blue", scene);
+    mat.diffuseColor = new BABYLON.Color3.Blue();
+    mesh.material = mat;
 }
 
 async function BuildWay(Way) {
@@ -49,36 +48,24 @@ async function BuildWay(Way) {
                     ModelsArray[num]['ModelMesh'].position['_y'],
                     ModelsArray[num]['ModelMesh'].position['_z']
                 )
-                if(i == 0 || i == Way[j]['path'].length-1)
-                {
+                if (i == 0 || i == Way[j]['path'].length - 1) {
                     SelectModel(ModelsArray[num]['ModelMesh']);
                 }
-                else
-                {
+                else {
                     let sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {});
                     sphere.position = new BABYLON.Vector3(
                         ModelsArray[num]['ModelMesh'].position['_x'],
-                        ModelsArray[num]['ModelMesh'].position['_y'] + 10,
+                        ModelsArray[num]['ModelMesh'].position['_y'] + 40,
                         ModelsArray[num]['ModelMesh'].position['_z']
                     )
                     SelectModel(sphere);
-                }               
+                }
                 console.log(myPoints);
 
             }
-            // let myPoints = [
-            //     new BABYLON.Vector3(0, 0, 0),
-            //     new BABYLON.Vector3(50, 0, 60),
-            //     new BABYLON.Vector3(100, 0, 200),
-            // ];
         }
-        let color = [new BABYLON.Color4(1, 0, 0, 1)];
-        const options = {
-            points: myPoints, //vec3 array,
-            updatable: true
-            //        colors: color
-        }
-        let lines = BABYLON.MeshBuilder.CreateLines("lines", options, scene);
+        const lines = BABYLON.MeshBuilder.CreateLines("lines", { points: myPoints});
+        lines.color = new BABYLON.Color3(1, 0, 0);
     }
 }
 

@@ -58,6 +58,9 @@ function LoadMap(engine, scene, assetsManager) {
             ground.dispose();
         ground = new BABYLON.MeshBuilder.CreateGround("ground",
         { width: width, height: height }, scene);
+        var matGround = new BABYLON.StandardMaterial("Green", scene);
+        matGround.diffuseColor = new BABYLON.Color3.Green();
+        ground.material = matGround;
         let array = MapFile['Models'];
         array = JSON.parse(array);
         for (let i = 0; i < array.length; i++) {
@@ -69,6 +72,9 @@ function LoadMap(engine, scene, assetsManager) {
                     array[i]['Rotation']['_y'],
                     array[i]['Rotation']['_z'],
                 );
+                var matModel = new BABYLON.StandardMaterial("White", scene);
+                matModel.diffuseColor = new BABYLON.Color3.White();
+                task.loadedMeshes[0].material = matModel;
                 var t = {
                     ModelName: array[i]['ModelName'],
                     ModelMesh:  task.loadedMeshes[0]
